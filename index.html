@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="選擇作業系統或演算法課程，開始閱讀課程題庫與學習資料。">
+  <title>課程學習入口</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", sans-serif; color: #26334a; background: #f5f7fc; line-height: 1.65; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; min-height: 100svh; background: radial-gradient(ellipse at 15% 10%, #e8edff, transparent 55%), radial-gradient(ellipse at 95% 85%, #e6f5ef, transparent 50%), #f5f7fc; }
+    .wrap { max-width: 950px; margin: 0 auto; padding: 38px 28px 30px; }
+    header { display: flex; align-items: center; gap: 11px; font-weight: 750; }
+    .brand { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #334ca0; color: white; font-size: 17px; }
+    main { padding: 70px 0 45px; }
+    .eyebrow { color: #556da0; font-size: 13px; letter-spacing: .15em; font-weight: 700; margin: 0 0 14px; }
+    h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.35; letter-spacing: -.04em; margin: 0 0 16px; }
+    .intro { color: #68748a; margin: 0; font-size: 17px; }
+    .courses { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 38px; }
+    .course { display: flex; flex-direction: column; padding: 30px; border: 1px solid #dae2f0; border-radius: 24px; background: #ffffffed; text-decoration: none; color: inherit; box-shadow: 0 12px 35px #273b6508; }
+    .course:focus-visible { outline: 3px solid #335bdd; outline-offset: 5px; }
+    .icon { width: 60px; height: 60px; display: grid; place-items: center; border-radius: 18px; background: #eef1ff; color: #5267bd; }
+    .icon svg { width: 31px; height: 31px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .algo .icon { color: #2f8a69; background: #eaf7f1; }
+    .en { color: #79859c; font-size: 12px; letter-spacing: .07em; margin: 23px 0 5px; }
+    h2 { margin: 0 0 10px; font-size: 25px; line-height: 1.4; }
+    .desc { margin: 0 0 25px; color: #68748a; font-size: 15px; }
+    .topics { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 30px; }
+    .topics span { font-size: 12px; padding: 4px 10px; border-radius: 7px; background: #f3f5fc; color: #626f8b; }
+    .algo .topics span { background: #f0f8f4; color: #4d7c69; }
+    .enter { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 19px; border-top: 1px solid #e8ecf4; color: #465db2; font-weight: 750; }
+    .algo .enter { color: #2e8063; }
+    .arrow { font-size: 23px; line-height: 1; }
+    footer { color: #79859a; font-size: 13px; border-top: 1px solid #e0e6f1; padding-top: 20px; }
+    @media (hover: hover) { .course:hover { border-color: #9eafd8; box-shadow: 0 15px 35px #273b6512; } .algo:hover { border-color: #9fc9b6; } }
+    @media (prefers-reduced-motion: no-preference) { .course { transition: border-color .18s, box-shadow .18s; } }
+    @media (max-width: 620px) { .wrap { padding: 24px 20px; } main { padding: 43px 0 30px; } .courses { grid-template-columns: 1fr; gap: 16px; margin-top: 28px; } .course { padding: 25px; border-radius: 20px; } .intro { font-size: 15px; } .en { margin-top: 19px; } .topics { margin-bottom: 22px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header><span class="brand" aria-hidden="true">學</span><span>課程學習入口</span></header>
+    <main>
+      <p class="eyebrow">COURSE LIBRARY</p>
+      <h1>選一門課，開始學習。</h1>
+      <p class="intro">課程題庫與學習資料都在這裡，點選課程即可進入。</p>
+      <div class="courses">
+        <a class="course" href="os.html" aria-label="進入作業系統課程">
+          <div class="icon" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="4" y="5" width="24" height="17" rx="3"/><path d="M11 28h10M16 22v6M9 11h6M9 16h10"/></svg></div>
+          <p class="en">OPERATING SYSTEMS</p>
+          <h2>作業系統</h2>
+          <p class="desc">閱讀課程題庫，搜尋題目，展開答案與學習說明。</p>
+          <div class="topics" aria-hidden="true"><span>課程題庫</span><span>題目搜尋</span><span>答案核對</span></div>
+          <span class="enter">進入課程<span class="arrow" aria-hidden="true">↗</span></span>
+        </a>
+        <a class="course algo" href="algorithms.html" aria-label="進入演算法課程">
+          <div class="icon" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="11" y="3" width="10" height="7" rx="2"/><rect x="2" y="23" width="10" height="6" rx="2"/><rect x="20" y="23" width="10" height="6" rx="2"/><path d="M16 10v6M7 23v-7h18v7"/></svg></div>
+          <p class="en">ALGORITHMS</p>
+          <h2>演算法</h2>
+          <p class="desc">進入演算法學習室，閱讀 L2、L3、L4 的課程與題庫。</p>
+          <div class="topics" aria-hidden="true"><span>L2</span><span>L3</span><span>L4</span></div>
+          <span class="enter">進入課程<span class="arrow" aria-hidden="true">↗</span></span>
+        </a>
+      </div>
+    </main>
+    <footer>把這個入口加入書籤，下次就能快速找到要讀的課程。</footer>
+  </div>
+</body>
+</html>
