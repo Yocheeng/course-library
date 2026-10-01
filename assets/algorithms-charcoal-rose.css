@@ -92,42 +92,77 @@ body {
 
 .course-menu {
   display: grid;
-  gap: 7px;
+  gap: 12px;
 }
 
 .course-nav {
+  display: block;
   width: 100%;
-  min-height: 72px;
-  padding: 13px 15px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background: transparent;
+  min-height: 126px;
+  padding: 18px 16px;
+  border: 1px solid var(--rail-line);
+  border-radius: 18px;
+  background: #2b2c32;
   color: #e5e4e8;
   text-align: left;
   transition: background-color 140ms ease, border-color 140ms ease;
 }
 
+.course-copy {
+  display: block;
+  width: 100%;
+}
+
+.course-nav .unit-number {
+  display: block;
+  margin-bottom: 10px;
+  color: #bbb9c0;
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+
+.course-nav .unit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.course-nav .unit-count {
+  flex-shrink: 0;
+  color: #c9c6cd;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
 .course-nav strong {
   display: block;
   color: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 650;
 }
 
 .course-nav small {
   display: block;
-  margin-top: 5px;
-  color: #aaa9ae;
+  margin-top: 10px;
+  color: #bbb9c0;
   font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: .025em;
 }
 
 .course-nav.active {
-  padding-left: 12px;
-  border-color: #4b454b;
+  padding-left: 13px;
+  border-color: #725361;
   border-left: 4px solid var(--rose);
   background: var(--rail-card);
   color: #fff;
   box-shadow: none;
+}
+
+.course-nav.active .unit-number,
+.course-nav.active .unit-count {
+  color: #e4b9c7;
 }
 
 .course-nav.active small {
