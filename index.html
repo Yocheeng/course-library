@@ -54,6 +54,16 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:lin
 @media(max-width:1050px){.pixel-page{width:min(100% - 48px,920px)}.pixel-hero{min-height:228px;padding-right:210px;padding-left:210px}.pixel-hero-art{width:190px;max-height:170px}.pixel-courses{gap:22px}.pixel-course{padding:28px 27px 25px}.pixel-course-name h2{font-size:31px}.pixel-course-desc{font-size:17px}}
 @media(max-width:760px){.pixel-page{width:auto;min-height:100svh;margin:0;padding:20px 20px 18px}.pixel-brand{gap:11px;font-size:21px}.pixel-brand-icon{width:48px;height:48px}.pixel-hero{min-height:0;margin-top:26px;padding:34px 5px 27px}.pixel-hero-art{display:none}.pixel-hero-copy h1{font-size:36px;line-height:1.3}.pixel-hero-copy p{font-size:18px}.pixel-courses{grid-template-columns:1fr;gap:18px;margin-top:0}.pixel-course{min-height:300px;padding:24px 24px 21px}.pixel-course-heading{gap:17px}.pixel-course-icon{width:66px;height:66px}.pixel-course-icon img{width:38px;height:38px}.pixel-course-name h2{font-size:29px}.pixel-course-name .en{font-size:12px}.pixel-course-desc{margin:20px 0 16px;font-size:16px}.pixel-course-tags{gap:9px;margin-bottom:20px}.pixel-course-tag{padding:5px 12px;font-size:14px}.pixel-enter{min-height:58px;font-size:20px}.pixel-footer{margin-top:26px;padding-top:14px;font-size:14px}}
 @media(max-width:380px){.pixel-page{padding-right:15px;padding-left:15px}.pixel-hero-copy h1{font-size:31px}.pixel-course{padding-right:19px;padding-left:19px}.pixel-course-heading{gap:13px}.pixel-course-name h2{font-size:26px}.pixel-course-desc{font-size:15px}}
+
+/* The course entrance uses the same palette as its learning room. */
+.pixel-course.algo{--accent:#94506a;--tint:#f6eff2;--shadow:#d5b6c1;color:#292a2f}
+.pixel-course.algo .pixel-course-icon{background:#ead8df}
+.pixel-course.algo .pixel-course-icon img{filter:grayscale(1) brightness(.55)}
+.pixel-course.algo .pixel-course-name h2{color:#292a2f}
+.pixel-course.algo .en,.pixel-course.algo .pixel-course-desc{color:#62545e}
+.pixel-course.algo .pixel-course-tag{background:#ead8df;color:#85475e}
+.pixel-course.algo::after{background:#c79dac66;box-shadow:18px 18px 0 #c79dac55,0 36px 0 #c79dac44}
+@media(max-width:760px){.pixel-hero{margin-top:16px;padding:16px 5px 20px}.pixel-course{min-height:0;padding:22px}.pixel-course-desc{margin:16px 0 12px}.pixel-course-tags{margin-bottom:18px}.pixel-course-heading{gap:14px}.pixel-hero-copy h1{font-size:32px}}
 </style>
 </head>
 <body>
