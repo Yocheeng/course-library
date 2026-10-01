@@ -96,17 +96,5 @@ window.courseLearning={
   cardTop:card=>card.querySelector('.cardtop'),render,resetPage:()=>{page=1;},
   validId:id=>UNITS.some(u=>u.questions.some(q=>q.id===id)),
   questionLabel:id=>{const u=UNITS.find(u=>u.questions.some(q=>q.id===id));return `${u.label} 第 ${u.questions.findIndex(q=>q.id===id)+1} 題`;},
-  validState:s=>s&&Number.isInteger(s.active)&&s.active>=0&&s.active<UNITS.length&&Number.isInteger(s.page)&&s.page>0,
-  stateLabel:s=>`${UNITS[s.active].label} · 第 ${s.page} 頁`,
-  capture:()=>({active,page,mode,chapter:$('chapter').value,type:$('typeSelect').value,query:$('search').value,answers:$('showAnswers').checked,drafts:[...drafts],selections:[...selections]}),
-  restore:s=>{
-    switchUnit(s.active);page=Math.min(s.page,Math.ceil(UNITS[active].questions.length/pageSize));
-    $('chapter').value=[...$('chapter').options].some(o=>o.value===s.chapter)?s.chapter:'all';
-    $('typeSelect').value=[...$('typeSelect').options].some(o=>o.value===s.type)?s.type:'all';
-    $('search').value=typeof s.query==='string'?s.query:'';$('showAnswers').checked=s.answers!==false;mode=s.mode==='practice'?'practice':'study';
-    drafts.clear();selections.clear();
-    for(const item of (Array.isArray(s.drafts)?s.drafts:[]))if(Array.isArray(item)&&typeof item[1]==='string'&&window.courseLearning.validId(item[0]))drafts.set(item[0],item[1]);
-    for(const item of (Array.isArray(s.selections)?s.selections:[]))if(Array.isArray(item)&&Array.isArray(item[1])&&window.courseLearning.validId(item[0]))selections.set(item[0],item[1].filter(n=>Number.isInteger(n)&&n>=0));
-    revealed.clear();render();
-  }
+  currentPage:()=>page
 };

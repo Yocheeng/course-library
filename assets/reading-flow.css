@@ -14,7 +14,6 @@ body[data-course="algorithms"] { --muted:#66636a; }
 .searchrow { gap:10px; }
 .learning-tools { display:flex; gap:8px 12px; margin:10px 0; }
 .learning-tools > * { grid-column:auto; grid-row:auto; }
-.resume-learning { max-width:320px; }
 .reading-settings { position:relative; margin-left:auto; color:var(--muted); }
 .reading-settings summary { min-height:44px; display:flex; align-items:center; padding:6px 10px; font-size:14px; cursor:pointer; list-style:none; }
 .reading-settings summary::-webkit-details-marker { display:none; }
@@ -49,7 +48,6 @@ body[data-course="algorithms"] { --muted:#66636a; }
   .searchrow .plain { padding:6px 10px; }
   .study-controls { margin-top:2px; }
   .learning-tools { gap:6px; margin:8px 0; }
-  .resume-learning { flex:1 0 100%; max-width:100%; }
   .reading-settings-body { width:min(280px,calc(100vw - 40px)); }
   .mobile-navigation { display:block; }
   .mobile-navigation > summary { display:flex; align-items:center; gap:6px; min-height:44px; padding:6px 8px; list-style:none; font-size:14px; cursor:pointer; }

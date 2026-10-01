@@ -11,11 +11,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .filter-fields label:first-child select { width:132px; }
 .filter-fields label:nth-child(2) select { width:108px; }
 .study-controls { flex:1; justify-content:flex-end; }
-.learning-tools { display:grid; grid-template-columns:minmax(180px,270px) 100px 160px minmax(80px,1fr); align-items:center; }
-.resume-learning { grid-column:1; grid-row:1; text-align:left; }
-.review-filter { grid-column:2; grid-row:1; }
-.reading-size { grid-column:3; grid-row:1; }
-.learning-tools > small { grid-column:4; grid-row:1; }
+.learning-tools { display:grid; grid-template-columns:100px 160px minmax(80px,1fr); align-items:center; }
+.review-filter { grid-column:1; grid-row:1; }
+.reading-size { grid-column:2; grid-row:1; }
+.learning-tools > small { grid-column:3; grid-row:1; }
 .learning-status { grid-column:1 / -1; }
 .reading-size select { border:1px solid var(--ui-line); border-radius:8px; background:#fff; color:var(--ink); padding:6px 9px; }
 .cardtop { align-items:center; flex-wrap:wrap; }
@@ -109,10 +108,9 @@ body[data-course="os"] { --page:#eef4f9; --surface:#f9fcff; --ink:#293f56; --mut
   .question { font-size:18px; }
   .badge { font-size:12px; }
   .learning-tools { grid-template-columns:100px minmax(0,1fr); }
-  .resume-learning { grid-column:1 / -1; grid-row:1; }
-  .review-filter { grid-column:1; grid-row:2; }
-  .reading-size { grid-column:2; grid-row:2; }
-  .learning-tools > small { grid-column:1 / -1; grid-row:3; }
+  .review-filter { grid-column:1; grid-row:1; }
+  .reading-size { grid-column:2; grid-row:1; }
+  .learning-tools > small { grid-column:1 / -1; grid-row:2; }
 }
 @media (prefers-reduced-motion:no-preference) {
   @view-transition { navigation:auto; }

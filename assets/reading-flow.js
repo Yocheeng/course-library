@@ -75,7 +75,7 @@
   function chip(text, clear) {
     const button = document.createElement('button'); button.type = 'button';
     button.textContent = text + ' ×'; button.setAttribute('aria-label', '移除篩選：' + text);
-    button.addEventListener('click', () => { clear(); ui.savePosition(); search.focus({preventScroll:true}); });
+    button.addEventListener('click', () => { clear(); search.focus({preventScroll:true}); });
     chips.append(button);
   }
   function clearSelect(select) { select.selectedIndex = 0; select.dispatchEvent(new Event('change', {bubbles:true})); }
@@ -100,7 +100,7 @@
     const prevButton = pager.querySelector('[aria-label="上一頁"]'), nextButton = pager.querySelector('[aria-label="下一頁"]');
     const pages = Math.max(1, ...Array.from(pager.querySelectorAll('[data-page]'), b => Number(b.dataset.page)).filter(Number.isFinite).slice(1, -1));
     previous.disabled = !prevButton || prevButton.disabled; next.disabled = !nextButton || nextButton.disabled;
-    quickPager.querySelector('span').textContent = `第 ${config.capture().page} / ${pages} 頁`;
+    quickPager.querySelector('span').textContent = `第 ${config.currentPage()} / ${pages} 頁`;
     quickPager.hidden = empty.hidden === false || (!prevButton && !nextButton);
   }
   const originalRefresh = ui.refresh;
