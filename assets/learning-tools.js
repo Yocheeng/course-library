@@ -91,7 +91,7 @@
     if (button) savePosition();
   });
   window.addEventListener('pagehide', () => { clearTimeout(pending); if (pending) savePosition(); });
-  const compact = matchMedia(`(max-width:${config.course === 'os' ? 850 : 720}px)`);
+  const compact = matchMedia(`(max-width:720px)`);
   const foldControls = () => document.querySelectorAll('.filter-details,#conceptGuide').forEach(details => { details.open = !compact.matches; });
   foldControls(); compact.addEventListener('change', foldControls);
   refresh();

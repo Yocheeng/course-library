@@ -47,32 +47,12 @@ body[data-course="os"] { --ui-accent:#38678f; --ui-soft:#e4f1fc; --ui-line:#c8dc
 [data-course="algorithms"] .guide { padding-top:12px; padding-bottom:12px; }
 [data-course="algorithms"] .cardtop { align-items:center; flex-wrap:wrap; }
 [data-course="algorithms"] .review-button { margin-left:auto; }
-[data-course="os"] header { position:sticky; top:0; z-index:20; }
-[data-course="os"] aside { position:sticky; top:79px; align-self:start; height:calc(100dvh - 79px); min-height:0; display:flex; flex-direction:column; padding-top:20px; }
-[data-course="os"] #units { display:flex; flex-direction:column; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; padding:3px; }
-[data-course="os"] .unit { flex:none; }
-[data-course="os"] .unit .count { white-space:nowrap; }
-[data-course="os"] .aside-note { flex-shrink:0; margin-top:12px; padding-top:14px; }
-[data-course="os"] .filterrow { align-items:flex-start; }
-[data-course="os"] .study-controls { margin-left:auto; min-height:44px; }
-[data-course="os"] .study-controls label { margin:0; }
-[data-course="os"] .meta { flex-wrap:wrap; }
-[data-course="os"] .meta .number { margin-left:0; }
-[data-course="os"] .review-button { margin-left:auto; }
 .large-reading .option,.large-reading .answer,.large-reading .explain,.large-reading .explanation p,.large-reading .translation { font-size:18px !important; }
 .large-reading .question h2,.large-reading h3.question { font-size:22px !important; }
 .large-reading .options { grid-template-columns:1fr; }
 @media (min-width:721px) { [data-course="algorithms"] .option:has(span) { overflow-wrap:anywhere; } }
 @media (max-width:1100px) { [data-course="algorithms"] .options { grid-template-columns:1fr; } }
-@media (max-width:850px) {
-  [data-course="os"] aside { position:static; height:auto; display:block; padding:12px 18px; }
-  [data-course="os"] #units,[data-course="os"] .navtitle { display:none; }
-  [data-course="os"] .unit-picker { display:block; }
-  [data-course="os"] .site-nav { margin-bottom:12px; }
-  [data-course="os"] .study-controls { margin-left:0; }
-  [data-course="os"] .filterrow { display:block; }
-  [data-course="os"] .filter-details summary { display:flex; }
-}
+
 @media (max-width:720px) {
   .site-nav { margin:0 0 10px; gap:6px; }
   .site-nav a { font-size:13px; padding:7px 10px; }
@@ -110,12 +90,7 @@ body[data-course="os"] { --ui-accent:#38678f; --ui-soft:#e4f1fc; --ui-line:#c8dc
   [data-course="algorithms"] .summary { font-size:13px; }
   [data-course="algorithms"] .question { font-size:18px; }
   [data-course="algorithms"] .badge { font-size:12px; }
-  [data-course="os"] .heading { margin-bottom:16px; padding:16px; }
-  [data-course="os"] .controls { margin-bottom:16px; }
-  [data-course="os"] .study-controls { margin-top:6px; }
 }
 @media print {
   .site-nav,.unit-picker,.learning-tools,.reading-size,.review-button,.filter-details { display:none !important; }
-  [data-course="os"] aside { display:none; }
-  [data-course="os"] .layout { display:block; }
 }
