@@ -92,6 +92,7 @@ $('cards').addEventListener('change',e=>{
 switchUnit(0);
 window.courseLearning={
   course:'os',toolbar:document.querySelector('.toolbar'),sidebar:document.querySelector('.sidebar'),list:$('cards'),
+  unitIds:()=>UNITS[active].questions.map(q=>q.id),
   cardTop:card=>card.querySelector('.cardtop'),render,resetPage:()=>{page=1;},
   validId:id=>UNITS.some(u=>u.questions.some(q=>q.id===id)),
   questionLabel:id=>{const u=UNITS.find(u=>u.questions.some(q=>q.id===id));return `${u.label} 第 ${u.questions.findIndex(q=>q.id===id)+1} 題`;},

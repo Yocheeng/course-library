@@ -11,12 +11,13 @@
 <link rel="stylesheet" href="assets/algorithms-charcoal-rose.css?v=unit-cards1">
 <link rel="stylesheet" href="assets/learning-ui.css?v=shell3">
 <link rel="stylesheet" href="assets/course-layout.css?v=shell3">
-<meta name="course-layout-version" content="balanced-20261001">
+<link rel="stylesheet" href="assets/reading-flow.css?v=reading-flow1">
+<meta name="course-layout-version" content="reading-flow1">
 </head>
 <body data-course="algorithms">
 <a class="skip" href="#main">跳至學習內容</a>
 <header class="topbar"><div class="brand"><span class="logo" aria-hidden="true"><img src="assets/icons/code-slash.svg" alt=""></span>演算法學習室</div><div class="tagline">一課一課，把觀念學會。 <span style="margin-left:18px">3 個單元 · 177 道題目</span></div></header>
-<div class="app"><aside class="sidebar" aria-label="課程單元導覽"><nav class="site-nav" aria-label="科目與首頁"><a href="index.html?v=balanced-20261001">← 課程首頁</a><a href="os.html?v=balanced-20261001" >作業系統</a><a href="algorithms.html?v=balanced-20261001" aria-current="page">演算法</a></nav><div class="unit-picker"><label for="lessonPicker">課程單元</label><select id="lessonPicker"></select></div><p class="navtitle">課程單元</p><nav id="courseMenu" class="course-menu" aria-label="選擇課程"></nav></aside>
+<div class="app"><aside class="sidebar" aria-label="課程單元導覽"><nav class="site-nav" aria-label="科目與首頁"><a href="index.html?v=reading-flow1">← 課程首頁</a><a href="os.html?v=reading-flow1" >作業系統</a><a href="algorithms.html?v=reading-flow1" aria-current="page">演算法</a></nav><div class="unit-picker"><label for="lessonPicker">課程單元</label><select id="lessonPicker"></select></div><p class="navtitle">課程單元</p><nav id="courseMenu" class="course-menu" aria-label="選擇課程"></nav></aside>
 <main class="main" id="main"><div class="breadcrumb"><span>我的演算法課程</span><span class="dot"></span><span id="crumb"></span></div><section class="heading"><div><div class="eyebrow" id="eyebrow"></div><h1 id="lessonTitle"></h1><p class="subtitle" id="lessonSub"></p></div><div class="count"><strong id="lessonCount"></strong><span>本單元題目</span></div></section>
 <nav class="lesson-tabs" id="lessonTabs" aria-label="切換課程單元"></nav>
 <details class="guide" id="conceptGuide" open><summary class="guide-head"><span class="guide-title" id="guideHeading"><img class="guide-icon" src="assets/icons/lightbulb.svg" alt="" aria-hidden="true">這一課，先抓住這個觀念</span><small>補充學習提示</small></summary><p id="guideText"></p></details>
@@ -68,6 +69,7 @@ $('list').addEventListener('change',e=>{const input=e.target,id=input.dataset.ch
 $('lessonPicker').addEventListener('change',e=>changeLesson(e.target.value));
 setupLesson();
 window.courseLearning={
+ unitIds:()=>current().questions.map((q,i)=>idFor(i)),
  course:'algorithms', toolbar:document.querySelector('.toolbar'), sidebar:document.querySelector('.sidebar'), list:$('list'),
  cardTop:card=>card.querySelector('.cardtop'), render, resetPage:()=>{page=1;},
  validId:id=>COURSES.some(c=>id.startsWith(c.id+'-')&&Number(id.split('-')[1])>=1&&Number(id.split('-')[1])<=c.questions.length),
@@ -78,5 +80,6 @@ window.courseLearning={
  restore:s=>{lesson=s.lesson;chapter='全部';type='全部';page=1;setupLesson();chapter=current().categories.includes(s.chapter)?s.chapter:'全部';type=[...new Set(current().questions.map(kind))].includes(s.type)?s.type:'全部';page=Math.min(s.page,Math.ceil(current().questions.length/PAGE_SIZE));mode=s.mode==='practice'?'practice':'study';$('search').value=typeof s.query==='string'?s.query:'';$('showAnswers').checked=s.answers!==false;drafts.clear();selections.clear();for(const item of (Array.isArray(s.drafts)?s.drafts:[])){if(Array.isArray(item)&&typeof item[1]==='string'&&window.courseLearning.validId(item[0]))drafts.set(item[0],item[1]);}for(const item of (Array.isArray(s.selections)?s.selections:[])){if(Array.isArray(item)&&Array.isArray(item[1])&&window.courseLearning.validId(item[0]))selections.set(item[0],item[1].filter(n=>Number.isInteger(n)&&n>=0));}revealed.clear();feedback.clear();render();}
 };
 </script>
-<script src="assets/learning-tools.js?v=shell3"></script>
+<script src="assets/learning-tools.js?v=reading-flow1"></script>
+<script src="assets/reading-flow.js?v=reading-flow1"></script>
 </body></html>

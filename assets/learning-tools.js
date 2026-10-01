@@ -43,13 +43,13 @@
       button.textContent = marked ? '已標記待複習' : '標記待複習';
       button.setAttribute('aria-label', `${config.questionLabel(card.dataset.id)}，${button.textContent}`);
     });
-    filter.querySelector('span').textContent = saved.size;
+    filter.querySelector('span').textContent = config.unitIds().filter(id => saved.has(id)).length;
     filter.setAttribute('aria-pressed', String(reviewOnly));
     resume.hidden = !resumeAvailable;
     if (last) resume.textContent = `繼續：${config.stateLabel(last)}`;
   }
-  const savePosition = () => { last = config.capture(); resumeAvailable = false; write(); refresh(); };
-  window.learningUI = { refresh, get reviewOnly() { return reviewOnly; }, isSaved:id => saved.has(id), savePosition, clearReview:()=>{reviewOnly=false;message('');} };
+  const savePosition = () => { last = config.capture(); resumeAvailable = false; write(); window.learningUI.refresh(); };
+  window.learningUI = { refresh, get reviewOnly() { return reviewOnly; }, get currentReviewCount() { return config.unitIds().filter(id => saved.has(id)).length; }, isSaved:id => saved.has(id), savePosition, clearReview:()=>{reviewOnly=false;message('');} };
   config.list.addEventListener('click', event => {
     const button = event.target.closest('[data-review-id]');
     if (!button) return;
@@ -57,7 +57,7 @@
     const marked = !saved.has(id);
     if (marked) saved.add(id); else saved.delete(id);
     write();
-    if (reviewOnly && !marked) config.render(); else refresh();
+    if (reviewOnly && !marked) config.render(); else window.learningUI.refresh();
     message(marked ? '已加入待複習。' : '已取消待複習標記。');
   });
   filter.addEventListener('click', () => {
@@ -70,7 +70,7 @@
     reviewOnly = false;
     config.restore(last);
     resumeAvailable = false;
-    refresh();
+    window.learningUI.refresh();
     config.list.scrollIntoView({block:'start'});
     message('已回到上次學習位置。');
   });
@@ -92,7 +92,12 @@
   });
   window.addEventListener('pagehide', () => { clearTimeout(pending); if (pending) savePosition(); });
   const compact = matchMedia(`(max-width:720px)`);
-  const foldControls = () => document.querySelectorAll('.filter-details,#conceptGuide').forEach(details => { details.open = !compact.matches; });
+  const foldControls = () => document.querySelectorAll('.filter-details').forEach(details => { details.open = !compact.matches; });
+  document.getElementById('conceptGuide').open = false;
   foldControls(); compact.addEventListener('change', foldControls);
   refresh();
+  if (new URLSearchParams(location.search).get('resume') === '1' && last) {
+    config.restore(last); resumeAvailable = false; refresh();
+    message('已接續上次的單元、頁碼與作答。');
+  }
 })();
