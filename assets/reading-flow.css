@@ -4,6 +4,7 @@ body[data-course="algorithms"] { --muted:#66636a; }
 [data-course="algorithms"] .subtitle,[data-course="algorithms"] .count span,[data-course="algorithms"] .guide-head small,[data-course="algorithms"] .filters,[data-course="algorithms"] .sources { color:#66636a; }
 [data-course="os"] .subtitle,[data-course="os"] .count span,[data-course="os"] .guide-head small,[data-course="os"] .filters,[data-course="os"] .badge.neutral,[data-course="os"] .qid { color:#526c84; }
 [data-course="os"] .summary { color:#4b637b; }
+[data-course="os"] .pager button.active { color:#fff; border-color:var(--rose-strong); }
 .heading,[data-course="os"] .heading { min-height:105px; margin-bottom:18px; }
 .heading h1 { margin-top:8px; margin-bottom:10px; }
 .guide { margin-bottom:18px; }
