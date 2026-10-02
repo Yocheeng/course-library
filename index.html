@@ -68,6 +68,37 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;background:lin
 .pixel-course.algo .pixel-course-tag{background:#ead8df;color:#85475e}
 .pixel-course.algo::after{background:#c79dac66;box-shadow:18px 18px 0 #c79dac55,0 36px 0 #c79dac44}
 
+/* Quiet motion keeps the pixel artwork intact while making the entrance feel alive. */
+@keyframes pixel-arrive{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
+@keyframes pixel-float{0%,100%{translate:0 0}50%{translate:0 -7px}}
+@keyframes pixel-grid-breathe{from{opacity:.46}to{opacity:.55}}
+@keyframes pixel-led-blink{0%,100%{opacity:.42}50%{opacity:.95}}
+.pixel-brand{animation:pixel-arrive .55s cubic-bezier(.2,.75,.25,1) both}
+.pixel-hero-copy{animation:pixel-arrive .62s .08s cubic-bezier(.2,.75,.25,1) both}
+.pixel-hero-art{animation:pixel-float 6.4s ease-in-out infinite}
+.pixel-hero-art.os-art{animation-delay:-2.4s}
+.pixel-hero-art.algo-art{animation-delay:-.8s}
+body::before{animation:pixel-grid-breathe 8s ease-in-out infinite alternate}
+.pixel-course{animation:pixel-arrive .62s cubic-bezier(.2,.75,.25,1) both}
+.pixel-course.os{animation-delay:.18s}
+.pixel-course.algo{animation-delay:.32s}
+.pixel-course::after{animation:pixel-led-blink 3.2s steps(2,end) infinite}
+.pixel-footer{animation:pixel-arrive .55s .42s cubic-bezier(.2,.75,.25,1) both}
+.pixel-course,.pixel-enter{transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s ease,filter .24s ease}
+.pixel-course:hover{transform:translateY(-5px);box-shadow:10px 10px 0 var(--shadow)}
+.pixel-course:active{transform:translateY(-1px)}
+.pixel-enter{overflow:hidden}
+.pixel-enter::before{content:"";position:absolute;top:0;bottom:0;left:-42%;width:28%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:skewX(-20deg);transition:transform .55s ease;pointer-events:none}
+.pixel-course:hover .pixel-enter::before{transform:translateX(600%) skewX(-20deg)}
+.pixel-enter img{transition:transform .24s cubic-bezier(.2,.75,.25,1)}
+.pixel-course:hover .pixel-enter img{transform:translateX(5px)}
+
+@media(prefers-reduced-motion:reduce){
+  body::before,.pixel-brand,.pixel-hero-copy,.pixel-hero-art,.pixel-course,.pixel-course::after,.pixel-footer{animation:none!important}
+  .pixel-course,.pixel-enter,.pixel-enter::before,.pixel-enter img{transition:none!important}
+  .pixel-course:hover,.pixel-course:active{transform:none;box-shadow:8px 8px 0 var(--shadow)}
+}
+
 </style>
 <meta name="course-layout-version" content="balanced-20261001">
 </head>
