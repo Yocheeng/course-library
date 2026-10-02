@@ -99,6 +99,50 @@ body::before{animation:pixel-grid-breathe 8s ease-in-out infinite alternate}
   .pixel-course:hover,.pixel-course:active{transform:none;box-shadow:8px 8px 0 var(--shadow)}
 }
 
+
+/* Layered motion: clearer cues, while keeping the existing pixel artwork. */
+@keyframes pixel-float {
+  0%,100% { translate:0 0; rotate:-1deg }
+  50% { translate:0 -12px; rotate:1.5deg }
+}
+@keyframes pixel-logo-nod {
+  0% { transform:rotate(0) scale(.9) }
+  42% { transform:rotate(-8deg) scale(1.06) }
+  72% { transform:rotate(4deg) scale(.98) }
+  100% { transform:rotate(0) scale(1) }
+}
+@keyframes pixel-icon-intro {
+  0%,100% { transform:translateY(0) }
+  45% { transform:translateY(-7px) }
+  70% { transform:translateY(0) }
+}
+@keyframes pixel-cta-signal {
+  0%,78%,100% { box-shadow:5px 5px 0 var(--shadow) }
+  87% { box-shadow:5px 8px 0 var(--shadow),0 0 0 4px var(--signal-color) }
+}
+@keyframes pixel-stripe-flow {
+  0%,100% { background-position:0 0,0 0,0 0 }
+  50% { background-position:0 0,8px 0,0 0 }
+}
+.pixel-brand-icon { transform-origin:center; animation:pixel-logo-nod .68s .2s cubic-bezier(.2,.75,.25,1) both }
+.pixel-hero-art { animation-duration:4.8s; transform-origin:center; transition:transform .32s cubic-bezier(.2,.75,.25,1),filter .32s ease }
+.pixel-hero-art.os-art { animation-delay:-2.4s }
+.pixel-hero-art.algo-art { animation-delay:-.7s }
+.pixel-hero-art:hover { transform:scale(1.06); filter:drop-shadow(8px 10px 0 rgba(50,103,205,.24)) saturate(1.12) }
+.pixel-course-icon { transform-origin:center; transition:transform .3s cubic-bezier(.2,.75,.25,1) }
+.pixel-course-icon img { transition:transform .3s cubic-bezier(.2,.75,.25,1) }
+.pixel-course-icon { animation:pixel-icon-intro .72s .82s cubic-bezier(.2,.75,.25,1) 1 }
+.pixel-course.algo .pixel-course-icon { animation-delay:1.12s }
+.pixel-course:hover .pixel-course-icon,.pixel-course:focus-visible .pixel-course-icon { transform:translateY(-4px) rotate(-5deg) }
+.pixel-course:hover .pixel-course-icon img,.pixel-course:focus-visible .pixel-course-icon img { transform:scale(1.1) }
+.pixel-enter { --signal-color:rgba(36,93,202,.14); animation:pixel-cta-signal 6s 1s ease-in-out infinite,pixel-stripe-flow 8s linear infinite }
+.pixel-course.algo .pixel-enter { --signal-color:rgba(148,80,106,.16); animation-delay:3.5s,4s }
+@media(prefers-reduced-motion:reduce) {
+  .pixel-brand-icon,.pixel-hero-art,.pixel-course-icon,.pixel-enter { animation:none!important; transition:none!important }
+  .pixel-hero-art:hover,.pixel-hero-art:focus-visible { transform:none!important; translate:none!important; rotate:none!important }
+  .pixel-course:hover .pixel-course-icon,.pixel-course:focus-visible .pixel-course-icon { transform:none!important }
+  .pixel-course:hover .pixel-course-icon img,.pixel-course:focus-visible .pixel-course-icon img { transform:none!important }
+}
 </style>
 <meta name="course-layout-version" content="balanced-20261001">
 </head>
