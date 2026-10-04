@@ -1,0 +1,85 @@
+.music-launcher {
+  position: fixed;
+  z-index: 1000;
+  right: clamp(16px, 2.4vw, 30px);
+  bottom: clamp(16px, 2.4vw, 30px);
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .52);
+  border-radius: 18px 18px 18px 5px;
+  background: #26344d;
+  box-shadow: 0 8px 24px rgba(21, 34, 55, .2), 3px 3px 0 rgba(45, 92, 177, .28);
+  color: #fff;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+.music-launcher:hover {
+  transform: translateY(-3px) rotate(-2deg);
+  box-shadow: 0 12px 28px rgba(21, 34, 55, .25), 3px 3px 0 rgba(45, 92, 177, .34);
+}
+
+.music-launcher:focus-visible {
+  outline: 3px solid #e38ba4;
+  outline-offset: 4px;
+}
+
+.music-launcher svg {
+  width: 25px;
+  height: 25px;
+}
+
+.music-launcher-bars {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: flex;
+  align-items: end;
+  gap: 2px;
+  height: 10px;
+}
+
+.music-launcher-bars i {
+  display: block;
+  width: 2px;
+  height: 3px;
+  border-radius: 2px;
+  background: #f4a8bc;
+}
+
+.music-launcher.is-playing .music-launcher-bars i {
+  animation: music-launcher-beat .62s ease-in-out infinite alternate;
+}
+
+.music-launcher.is-playing .music-launcher-bars i:nth-child(2) { animation-delay: -.42s; }
+.music-launcher.is-playing .music-launcher-bars i:nth-child(3) { animation-delay: -.2s; }
+.music-launcher.is-playing .music-launcher-bars i:nth-child(4) { animation-delay: -.5s; }
+
+.music-launcher-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes music-launcher-beat {
+  from { height: 3px; }
+  to { height: 10px; }
+}
+
+@media (max-width: 540px) {
+  .music-launcher { width: 52px; height: 52px; border-radius: 16px 16px 16px 5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-launcher { transition: none; }
+  .music-launcher.is-playing .music-launcher-bars i { animation: none; height: 6px; }
+}
