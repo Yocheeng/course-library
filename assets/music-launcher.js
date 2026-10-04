@@ -1,4 +1,5 @@
 (() => {
+  if (window.courseLibraryContentFrame) return;
   const stateKey = 'course-library-music-state';
   const playerPath = new URL('music-player.html?embed=1&v=4', document.baseURI);
 
@@ -49,6 +50,9 @@
   button.addEventListener('click', () => setPanelOpen(panel.hidden));
   window.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !panel.hidden) setPanelOpen(false, true);
+  });
+  window.addEventListener('course-library:hide-music', () => {
+    if (!panel.hidden) setPanelOpen(false, true);
   });
   window.addEventListener('message', event => {
     if (event.origin !== location.origin || event.source !== frame.contentWindow) return;
