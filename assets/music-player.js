@@ -7,14 +7,24 @@
   const stateKey = 'course-library-music-state';
   let currentIndex = -1;
   let shuffleDeck = [];
+  let shuffleEnabled = false;
+  let repeatEnabled = false;
+  let playbackHistory = [];
+  let historyCursor = -1;
 
   function setState(playing, ready = true) {
     const state = { playing, ready, title: currentIndex >= 0 ? tracks[currentIndex].title : '', updatedAt: Date.now() };
     try { localStorage.setItem(stateKey, JSON.stringify(state)); } catch { /* Storage is optional. */ }
     $('record').classList.toggle('is-playing', playing);
     $('playLabel').textContent = tracks.length ? (playing ? '暫停播放' : currentIndex >= 0 ? '繼續播放' : '隨機播放') : '等待歌曲';
-    $('playPause').querySelector('span:first-child').textContent = playing ? 'Ⅱ' : '▶';
+    $('playPause').querySelector('.play-icon').textContent = playing ? 'Ⅱ' : '▶';
     $('playPause').setAttribute('aria-label', playing ? '暫停播放' : currentIndex >= 0 ? '繼續播放' : '隨機播放');
+    $('shuffleToggle').classList.toggle('is-active', shuffleEnabled);
+    $('shuffleToggle').setAttribute('aria-pressed', String(shuffleEnabled));
+    $('shuffleToggle').setAttribute('aria-label', shuffleEnabled ? '關閉隨機播放' : '開啟隨機播放');
+    $('repeatToggle').classList.toggle('is-active', repeatEnabled);
+    $('repeatToggle').setAttribute('aria-pressed', String(repeatEnabled));
+    $('repeatToggle').setAttribute('aria-label', repeatEnabled ? '關閉單曲重複播放' : '開啟單曲重複播放');
     renderList();
   }
 
@@ -73,7 +83,10 @@
     }
 
     $('playPause').disabled = false;
+    $('shuffleToggle').disabled = tracks.length < 2;
+    $('previousTrack').disabled = tracks.length < 2;
     $('nextTrack').disabled = tracks.length < 2;
+    $('repeatToggle').disabled = false;
     $('playlistNote').textContent = '播放順序會先跑完一輪才重抽；這一輪內不會重複。';
   }
 
@@ -81,8 +94,13 @@
     return String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
   }
 
-  async function playTrack(index) {
+  async function playTrack(index, { recordHistory = true } = {}) {
     if (!tracks.length || index < 0 || index >= tracks.length) return;
+    if (recordHistory && currentIndex !== index) {
+      playbackHistory = playbackHistory.slice(0, historyCursor + 1);
+      playbackHistory.push(index);
+      historyCursor = playbackHistory.length - 1;
+    }
     currentIndex = index;
     shuffleDeck = shuffleDeck.filter(item => item !== index);
     const track = tracks[index];
@@ -109,19 +127,61 @@
     playTrack(pickRandomIndex());
   }
 
+  function playSequential(direction) {
+    if (!tracks.length) return;
+    if (currentIndex < 0) { playTrack(0); return; }
+    const nextIndex = (currentIndex + direction + tracks.length) % tracks.length;
+    playTrack(nextIndex);
+  }
+
+  function playPrevious() {
+    if (!tracks.length) return;
+    if (audio.currentTime > 3 || currentIndex < 0) {
+      audio.currentTime = 0;
+      if (currentIndex >= 0) audio.play().catch(() => {});
+      return;
+    }
+    if (historyCursor > 0) {
+      historyCursor -= 1;
+      playTrack(playbackHistory[historyCursor], { recordHistory: false });
+      return;
+    }
+    playSequential(-1);
+  }
+
+  function playNext() {
+    if (shuffleEnabled) playRandom();
+    else playSequential(1);
+  }
+
   $('playPause').disabled = tracks.length === 0;
+  $('shuffleToggle').disabled = tracks.length < 2;
+  $('previousTrack').disabled = tracks.length < 2;
   $('nextTrack').disabled = tracks.length < 2;
+  $('repeatToggle').disabled = tracks.length === 0;
   $('volumeBar').addEventListener('input', event => { audio.volume = Number(event.target.value); });
   audio.volume = Number($('volumeBar').value);
   $('playPause').addEventListener('click', () => {
     if (audio.paused) {
-      if (currentIndex < 0) playRandom();
+      if (currentIndex < 0) shuffleEnabled ? playRandom() : playTrack(0);
       else audio.play().catch(() => { $('playerStatus').textContent = '請再按一次播放，瀏覽器需要你的播放確認。'; });
     } else {
       audio.pause();
     }
   });
-  $('nextTrack').addEventListener('click', playRandom);
+  $('shuffleToggle').addEventListener('click', () => {
+    shuffleEnabled = !shuffleEnabled;
+    if (shuffleEnabled) shuffleDeck = [];
+    setState(!audio.paused);
+    $('playerStatus').textContent = shuffleEnabled ? '已開啟隨機播放。' : '已關閉隨機播放，接下來依歌單順序播放。';
+  });
+  $('repeatToggle').addEventListener('click', () => {
+    repeatEnabled = !repeatEnabled;
+    setState(!audio.paused);
+    $('playerStatus').textContent = repeatEnabled ? '已開啟單曲重複播放。' : '已關閉單曲重複播放。';
+  });
+  $('previousTrack').addEventListener('click', playPrevious);
+  $('nextTrack').addEventListener('click', playNext);
   $('trackList').addEventListener('click', event => {
     const button = event.target.closest('[data-track]');
     if (button) playTrack(Number(button.dataset.track));
@@ -142,7 +202,14 @@
     setState(false);
     if (currentIndex >= 0 && audio.currentTime > 0 && !audio.ended) $('playerStatus').textContent = '已暫停，可隨時繼續。';
   });
-  audio.addEventListener('ended', playRandom);
+  audio.addEventListener('ended', () => {
+    if (repeatEnabled) {
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    } else {
+      playNext();
+    }
+  });
   audio.addEventListener('error', () => {
     setState(false);
     $('playerStatus').textContent = '找不到這首歌的音檔；請確認清單路徑和上傳檔案相同。';
@@ -165,7 +232,7 @@
       audio.pause();
     } else if (event.data?.type === 'course-library:toggle') {
       if (audio.paused) {
-        if (currentIndex < 0) playRandom();
+        if (currentIndex < 0) shuffleEnabled ? playRandom() : playTrack(0);
         else audio.play().catch(() => { $('playerStatus').textContent = '請再按一次播放器中的播放按鈕，瀏覽器需要你的確認。'; });
       } else {
         audio.pause();
@@ -176,7 +243,10 @@
 
   if (!tracks.length) {
     $('playPause').disabled = true;
+    $('shuffleToggle').disabled = true;
+    $('previousTrack').disabled = true;
     $('nextTrack').disabled = true;
+    $('repeatToggle').disabled = true;
     renderList();
   } else {
     renderList();
