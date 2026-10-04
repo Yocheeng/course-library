@@ -1,7 +1,7 @@
 (() => {
   if (window.courseLibraryContentFrame) return;
   const stateKey = 'course-library-music-state';
-  const playerPath = new URL('music-player.html?embed=1&v=4', document.baseURI);
+  const playerPath = new URL('music-player.html?embed=1&v=5', document.baseURI);
 
   const button = document.createElement('button');
   button.type = 'button';
