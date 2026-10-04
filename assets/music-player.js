@@ -147,7 +147,18 @@
     setState(false);
     $('playerStatus').textContent = '找不到這首歌的音檔；請確認清單路徑和上傳檔案相同。';
   });
-  $('closePlayer').addEventListener('click', () => window.close());
+  $('closePlayer').addEventListener('click', () => {
+    if (window.parent !== window && new URLSearchParams(location.search).has('embed')) {
+      window.parent.postMessage({ type: 'course-library:close' }, location.origin);
+    } else {
+      window.close();
+    }
+  });
+  window.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && window.parent !== window && new URLSearchParams(location.search).has('embed')) {
+      window.parent.postMessage({ type: 'course-library:close' }, location.origin);
+    }
+  });
   window.addEventListener('message', event => {
     if (event.origin !== location.origin) return;
     if (event.data?.type === 'course-library:pause') {
@@ -155,7 +166,7 @@
     } else if (event.data?.type === 'course-library:toggle') {
       if (audio.paused) {
         if (currentIndex < 0) playRandom();
-        else audio.play().catch(() => { $('playerStatus').textContent = '請在播放器視窗中按播放，瀏覽器需要你的確認。'; });
+        else audio.play().catch(() => { $('playerStatus').textContent = '請再按一次播放器中的播放按鈕，瀏覽器需要你的確認。'; });
       } else {
         audio.pause();
       }
