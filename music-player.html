@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#20283a">
+  <title>課間電台｜課程學習站</title>
+  <link rel="icon" type="image/png" href="assets/icons/course-mascot.png?v=1">
+  <link rel="stylesheet" href="assets/music-player.css?v=2">
+</head>
+<body>
+  <main class="radio-shell">
+    <header class="radio-header">
+      <div class="radio-brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 18V5l11-2v13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="16" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
+      </div>
+      <div>
+        <p class="radio-kicker">COURSE LIBRARY / FM 07</p>
+        <h1>課間電台</h1>
+      </div>
+      <button class="icon-button close-button" id="closePlayer" type="button" aria-label="關閉播放器" title="關閉播放器">×</button>
+    </header>
+
+    <section class="now-card" aria-labelledby="nowHeading">
+      <div class="on-air-row"><span class="on-air-dot" aria-hidden="true"></span><span>ON AIR</span><span class="track-position" id="trackPosition">待命</span></div>
+      <div class="record-stage" aria-hidden="true">
+        <div class="record" id="record"><div class="record-center"><span>FM</span><strong>07</strong><i></i></div></div>
+        <div class="sound-lines"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <p class="section-kicker" id="nowHeading">NOW PLAYING</p>
+      <h2 id="trackTitle">等歌曲進站</h2>
+      <p class="track-note" id="trackNote">提供音檔後，這裡就會開始放歌。</p>
+
+      <div class="seek-row">
+        <span id="elapsedTime">0:00</span>
+        <input id="seekBar" type="range" min="0" max="100" value="0" aria-label="播放進度" disabled>
+        <span id="durationTime">0:00</span>
+      </div>
+      <div class="main-controls">
+        <button class="play-button" id="playPause" type="button" disabled><span aria-hidden="true">▶</span><span id="playLabel">隨機播放</span></button>
+        <button class="icon-button next-button" id="nextTrack" type="button" aria-label="隨機播放下一首" title="隨機播放下一首" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l10 7-10 7V5Z"/><path d="M19 5v14"/></svg></button>
+      </div>
+      <div class="volume-row"><span aria-hidden="true">♪</span><input id="volumeBar" type="range" min="0" max="1" step="0.01" value="0.65" aria-label="音量"></div>
+      <p class="player-status" id="playerStatus" role="status" aria-live="polite">歌單準備中…</p>
+    </section>
+
+    <section class="playlist-card" aria-labelledby="playlistHeading">
+      <div class="playlist-heading"><div><p class="section-kicker">IN ROTATION</p><h2 id="playlistHeading">隨機歌單</h2></div><span class="playlist-count" id="playlistCount">00 / 10</span></div>
+      <ol class="track-list" id="trackList"></ol>
+      <p class="playlist-note" id="playlistNote">歌曲到齊後，隨機播放會先播完一輪再重抽，不會連續播同一首。</p>
+    </section>
+    <p class="radio-footer">戴上耳機，繼續讀一點。</p>
+  </main>
+  <audio id="audio" preload="metadata"></audio>
+  <script src="assets/music-playlist.js?v=2"></script>
+  <script src="assets/music-player.js?v=3"></script>
+</body>
+</html>
