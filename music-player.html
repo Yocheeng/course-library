@@ -6,7 +6,8 @@
   <meta name="theme-color" content="#20283a">
   <title>課間電台｜課程學習站</title>
   <link rel="icon" type="image/png" href="assets/icons/course-mascot.png?v=1">
-  <link rel="stylesheet" href="assets/music-player.css?v=2">
+  <script>if (new URLSearchParams(location.search).has('embed')) document.documentElement.classList.add('music-embedded');</script>
+  <link rel="stylesheet" href="assets/music-player.css?v=5">
 </head>
 <body>
   <main class="radio-shell">
@@ -53,6 +54,6 @@
   </main>
   <audio id="audio" preload="metadata"></audio>
   <script src="assets/music-playlist.js?v=2"></script>
-  <script src="assets/music-player.js?v=3"></script>
+  <script src="assets/music-player.js?v=4"></script>
 </body>
 </html>

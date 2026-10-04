@@ -77,6 +77,28 @@ input[type="range"]:disabled { cursor: default; opacity: .5; }
 .empty-tag { color: #b7b5b0; font-size: 9px; letter-spacing: .06em; }
 .playlist-note { margin: 9px 1px 0; padding-top: 8px; border-top: 1px dashed #dfd9d0; color: var(--muted); font-size: 10px; line-height: 1.6; }
 .radio-footer { margin: 11px 0 0; color: #828898; font-size: 10px; letter-spacing: .12em; text-align: center; }
+html.music-embedded,html.music-embedded body { min-width: 0; min-height: 100%; height: 100%; overflow-x: hidden; }
+html.music-embedded body { padding: 8px; overflow-y: auto; }
+html.music-embedded .radio-shell { width: 100%; margin: 0 auto; }
+html.music-embedded .radio-header { margin-bottom: 7px; }
+html.music-embedded .radio-brand-mark { width: 34px; height: 34px; }
+html.music-embedded .radio-header h1 { font-size: 17px; }
+html.music-embedded .record-stage { display: none; }
+html.music-embedded .now-card { padding: 9px 11px 8px; }
+html.music-embedded .now-card > h2 { font-size: 16px; }
+html.music-embedded .track-note { min-height: 18px; margin: 2px 0 7px; }
+html.music-embedded .main-controls { grid-template-columns: minmax(0,1fr) 40px; gap: 7px; margin-top: 8px; }
+html.music-embedded .play-button { min-height: 38px; }
+html.music-embedded .next-button { width: 40px; height: 38px; }
+html.music-embedded .volume-row { margin-top: 7px; }
+html.music-embedded .player-status { min-height: 15px; margin-top: 3px; }
+html.music-embedded .playlist-card { margin-top: 7px; padding: 9px 10px 8px; }
+html.music-embedded .playlist-heading { padding-bottom: 6px; }
+html.music-embedded .track-list { grid-template-columns: minmax(0,1fr); gap: 1px; max-height: 150px; overflow-y: auto; margin-top: 5px; }
+html.music-embedded .track-button { min-height: 27px; grid-template-columns: 24px minmax(0,1fr); gap: 5px; padding: 2px 4px; }
+html.music-embedded .track-button .empty-tag { display: none; }
+html.music-embedded .playlist-note { display: none; }
+html.music-embedded .radio-footer { display: none; }
 @keyframes vinyl-spin { to { transform: rotate(360deg); } }
 @keyframes sound-wave { from { height: 5px; } to { height: 25px; } }
 @media (max-width: 360px) { body { padding: 16px 10px; } .now-card { padding-right: 15px; padding-left: 15px; } .playlist-card { padding-right: 12px; padding-left: 12px; } }
