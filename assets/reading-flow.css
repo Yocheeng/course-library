@@ -67,3 +67,6 @@ body[data-course="algorithms"] { --muted:#66636a; }
   .card { padding:18px; }
 }
 @media print { .reading-settings,.active-filters,.mobile-navigation,.reading-pager { display:none !important; } }
+
+.practice-feedback .feedback { margin:10px 0; }
+.practice-feedback button { min-height:44px; }

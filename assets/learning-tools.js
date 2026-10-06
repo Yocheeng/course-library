@@ -43,9 +43,20 @@
     });
     filter.querySelector('span').textContent = config.unitIds().filter(id => saved.has(id)).length;
     filter.setAttribute('aria-pressed', String(reviewOnly));
+    config.list.querySelectorAll('[data-add-review]').forEach(button => {
+      const marked = saved.has(button.dataset.addReview);
+      button.disabled = marked;
+      button.textContent = marked ? '已加入待複習' : '答錯了，加入待複習';
+    });
+  }
+  function addReview(id) {
+    if (!config.validId(id)) return;
+    saved.add(id); write(); window.learningUI.refresh(); message('已加入待複習。');
   }
   window.learningUI = { refresh, get reviewOnly() { return reviewOnly; }, get currentReviewCount() { return config.unitIds().filter(id => saved.has(id)).length; }, isSaved:id => saved.has(id), clearReview:()=>{reviewOnly=false;message('');} };
   config.list.addEventListener('click', event => {
+    const add = event.target.closest('[data-add-review]');
+    if (add) { addReview(add.dataset.addReview); return; }
     const button = event.target.closest('[data-review-id]');
     if (!button) return;
     const id = button.dataset.reviewId;
