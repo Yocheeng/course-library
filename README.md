@@ -2,7 +2,7 @@
 
 作業系統與演算法課程題庫網站，提供分單元閱讀、搜尋篩選與練習作答，搭配答案解析和課間電台。
 
-**線上網站：** [yocheeng.github.io/course-library](https://yocheeng.github.io/course-library/)
+**線上網站：** [yocheng06.github.io/course-library](https://yocheng06.github.io/course-library/)
 
 ## 題庫
 
