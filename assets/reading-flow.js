@@ -5,6 +5,8 @@
   const search = document.getElementById('search');
   const chapter = document.getElementById(config.course === 'os' ? 'chapter' : 'chapterSelect');
   const type = document.getElementById('typeSelect');
+  const quality = document.getElementById('qualitySelect');
+  const searchScope = document.getElementById('searchScopeSelect');
   const unit = document.getElementById(config.course === 'os' ? 'unitPicker' : 'lessonPicker');
   const tools = document.querySelector('.learning-tools');
   const settings = document.createElement('details');
@@ -14,11 +16,9 @@
   settingsBody.append(tools.querySelector('.reading-size'), tools.querySelector('small'));
   settingsBody.querySelector('small').textContent = '紀錄只保存在這台裝置，清除網站資料會一併刪除；手機與電腦不會自動同步。';
   tools.insertBefore(settings, tools.querySelector('.learning-status'));
-  tools.querySelector('.review-filter').firstChild.textContent = '本單元待複習 ';
   const scope = document.createElement('p');
   scope.className = 'search-scope';
-  search.closest('.searchrow').before(scope);
-  search.placeholder = config.course === 'os' ? '搜尋此單元的題目、答案或術語…' : '搜尋此單元的題目、答案或公式…';
+  document.querySelector('.search-options').after(scope);
   search.setAttribute('aria-describedby', 'searchScope'); scope.id = 'searchScope';
   const chips = document.createElement('div');
   chips.className = 'active-filters'; chips.setAttribute('aria-label', '目前套用的篩選');
@@ -46,9 +46,11 @@
   });
   document.addEventListener('click', event => {
     if (navigation.open && !navigation.contains(event.target)) navigation.open = false;
+    if (settings.open && !settings.contains(event.target)) settings.open = false;
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && navigation.open) { navigation.open = false; navigation.querySelector('summary').focus(); }
+    else if (event.key === 'Escape' && settings.open) { settings.open = false; settings.querySelector('summary').focus(); }
   });
 
   const quickPager = document.createElement('nav');
@@ -59,7 +61,6 @@
   for (const [button, label] of [[previous, '上一頁'], [next, '下一頁']]) {
     button.addEventListener('click', () => {
       document.getElementById('pager').querySelector(`[aria-label="${label}"]`)?.click();
-      config.list.scrollIntoView({block:'start'});
     });
   }
   const empty = document.getElementById('empty');
@@ -80,28 +81,37 @@
   }
   function clearSelect(select) { select.selectedIndex = 0; select.dispatchEvent(new Event('change', {bubbles:true})); }
   function refresh() {
-    const label = unit.selectedOptions[0]?.textContent.split(' · ')[1] || '';
-    scope.textContent = '搜尋範圍：目前單元 · ' + label;
+    const label = config.scopeLabel();
+    scope.textContent = '搜尋範圍：' + label;
+    const range = config.allUnits() ? '全部單元' : '目前單元';
+    search.placeholder = `搜尋${range}的題目、答案或${config.course === 'os' ? '術語' : '公式'}…`;
+    search.setAttribute('aria-label', `搜尋${label}的題目、答案與解析`);
+    tools.querySelector('.review-filter').firstChild.textContent = config.allUnits() ? '全部單元待複習 ' : '本單元待複習 ';
     unitSelect.innerHTML = unit.innerHTML; unitSelect.value = unit.value;
     chips.replaceChildren();
     if (search.value.trim()) chip('搜尋：' + search.value.trim(), () => { search.value = ''; search.dispatchEvent(new Event('input', {bubbles:true})); });
     if (chapter.selectedIndex > 0) chip('章節：' + chapter.selectedOptions[0].textContent, () => clearSelect(chapter));
     if (type.selectedIndex > 0) chip('題型：' + type.value, () => clearSelect(type));
-    if (ui.reviewOnly) chip('只看本單元待複習', () => tools.querySelector('.review-filter').click());
+    if (quality.value === 'pending') chip('只看待確認', () => clearSelect(quality));
+    if (config.allUnits()) chip('範圍：全部單元', () => clearSelect(searchScope));
+    if (ui.reviewOnly) chip('只看待複習', () => tools.querySelector('.review-filter').click());
     chips.hidden = chips.childElementCount === 0;
     if (!empty.hidden) {
       const noBookmarks = ui.reviewOnly && ui.currentReviewCount === 0;
-      empty.querySelector('h3').textContent = noBookmarks ? '本單元還沒有待複習題目' : '目前單元沒有符合的題目';
+      empty.querySelector('h3').textContent = noBookmarks ? '所選範圍還沒有待複習題目' : quality.value === 'pending' ? '所選條件沒有待確認題目' : '所選範圍沒有符合的題目';
       empty.querySelector('p').textContent = noBookmarks
-        ? '按「重設篩選」回到題目列表，再將想複習的題目標記起來。其他單元的標記請切換到該單元查看。'
-        : '搜尋只涵蓋「' + label + '」。可移除上方篩選或重設；若要找其他內容，請切換單元。';
+        ? '按「重設篩選」回到題目列表，再將想複習的題目標記起來。也可調整搜尋範圍，查看其他單元的標記。'
+        : '搜尋涵蓋「' + label + '」。可移除上方篩選或重設；' + (config.allUnits() ? '目前已涵蓋本課程全部單元。' : '若要找其他單元，請將搜尋範圍改為「全部單元」。');
     }
     const pager = document.getElementById('pager');
     const prevButton = pager.querySelector('[aria-label="上一頁"]'), nextButton = pager.querySelector('[aria-label="下一頁"]');
-    const pages = Math.max(1, ...Array.from(pager.querySelectorAll('[data-page]'), b => Number(b.dataset.page)).filter(Number.isFinite).slice(1, -1));
+    const pages = config.pageCount();
     previous.disabled = !prevButton || prevButton.disabled; next.disabled = !nextButton || nextButton.disabled;
-    quickPager.querySelector('span').textContent = `第 ${config.currentPage()} / ${pages} 頁`;
-    quickPager.hidden = empty.hidden === false || (!prevButton && !nextButton);
+    const hasPager = empty.hidden && prevButton && nextButton;
+    previous.hidden = next.hidden = !hasPager;
+    quickPager.querySelector('span').textContent = empty.hidden ? `第 ${config.currentPage()} / ${pages} 頁` : '沒有符合的題目';
+    quickPager.classList.toggle('single-page', !hasPager);
+    quickPager.hidden = false;
   }
   const originalRefresh = ui.refresh;
   ui.refresh = () => { originalRefresh(); refresh(); };

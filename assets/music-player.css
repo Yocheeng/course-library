@@ -116,3 +116,25 @@ html.music-embedded .radio-footer { display: none; }
   .track-button .empty-tag { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto!important; animation-duration: .01ms!important; animation-iteration-count: 1!important; } }
+
+/* Readable metadata and usable targets in standalone and embedded players. */
+:root { --muted:#525c70; --rose-strong:#85475e; }
+.radio-header > div:not(.radio-brand-mark) { min-width:0; }
+.radio-kicker,.section-kicker { font-size:12px; letter-spacing:.08em; }
+.on-air-row,.track-note,.seek-row,.player-status,.playlist-count,.track-row,.playlist-note,.radio-footer { font-size:14px; }
+.radio-footer,.track-number,.empty-tag { color:var(--muted); }
+.empty-tag { font-size:12px; }
+.record-center { background:var(--rose-strong); font-size:12px; }
+.mode-button.is-active,.track-row.is-current .track-number { color:var(--rose-strong); }
+.mode-button.is-active { border-color:var(--rose-strong); }
+.icon-button:focus-visible,.play-button:focus-visible,.track-button:focus-visible,input:focus-visible { outline-color:var(--rose-strong); }
+.close-button,.transport-button { width:44px; height:44px; }
+.main-controls { grid-template-columns:44px 44px minmax(64px,1fr) 44px 44px; }
+input[type="range"] { min-height:44px; accent-color:var(--rose-strong); }
+.seek-row { grid-template-columns:40px minmax(0,1fr) 40px; }
+.track-button { min-height:44px; }
+.track-note-short,.now-card > h2 { white-space:normal; overflow-wrap:anywhere; }
+html.music-embedded .main-controls { grid-template-columns:44px 44px minmax(44px,1fr) 44px 44px; }
+html.music-embedded .transport-button,html.music-embedded .play-button { width:44px; height:44px; }
+html.music-embedded .track-button { min-height:44px; }
+@media(max-width:420px) { .track-list { grid-template-columns:minmax(0,1fr); } }

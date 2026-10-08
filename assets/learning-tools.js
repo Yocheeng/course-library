@@ -40,8 +40,20 @@
       button.setAttribute('aria-pressed', String(marked));
       button.textContent = marked ? '已標記待複習' : '標記待複習';
       button.setAttribute('aria-label', `${config.questionLabel(card.dataset.id)}，${button.textContent}`);
+      if (!card.querySelector('.question-report')) {
+        const actions = document.createElement('div');
+        actions.className = 'question-actions';
+        const report = document.createElement('a');
+        report.className = 'question-report';
+        report.href = window.courseQuestionTools.reportURL(config.questionDetails(card.dataset.id));
+        report.target = '_blank'; report.rel = 'noopener noreferrer';
+        report.textContent = '回報更正（GitHub）↗';
+        report.setAttribute('aria-label', `${config.questionLabel(card.dataset.id)}，回報更正（開啟新分頁，需要登入 GitHub）`);
+        report.title = '開啟 GitHub 回報表單，需登入；送出前可編輯內容';
+        actions.append(report); card.append(actions);
+      }
     });
-    filter.querySelector('span').textContent = config.unitIds().filter(id => saved.has(id)).length;
+    filter.querySelector('span').textContent = config.scopeIds().filter(id => saved.has(id)).length;
     filter.setAttribute('aria-pressed', String(reviewOnly));
     config.list.querySelectorAll('[data-add-review]').forEach(button => {
       const marked = saved.has(button.dataset.addReview);
@@ -53,7 +65,7 @@
     if (!config.validId(id)) return;
     saved.add(id); write(); window.learningUI.refresh(); message('已加入待複習。');
   }
-  window.learningUI = { refresh, get reviewOnly() { return reviewOnly; }, get currentReviewCount() { return config.unitIds().filter(id => saved.has(id)).length; }, isSaved:id => saved.has(id), clearReview:()=>{reviewOnly=false;message('');} };
+  window.learningUI = { refresh, get reviewOnly() { return reviewOnly; }, get currentReviewCount() { return config.scopeIds().filter(id => saved.has(id)).length; }, isSaved:id => saved.has(id), clearReview:()=>{reviewOnly=false;message('');} };
   config.list.addEventListener('click', event => {
     const add = event.target.closest('[data-add-review]');
     if (add) { addReview(add.dataset.addReview); return; }
@@ -63,13 +75,14 @@
     const marked = !saved.has(id);
     if (marked) saved.add(id); else saved.delete(id);
     write();
-    if (reviewOnly && !marked) config.render(); else window.learningUI.refresh();
+    if (reviewOnly && !marked) { config.render(); filter.focus({preventScroll:true}); }
+    else window.learningUI.refresh();
     message(marked ? '已加入待複習。' : '已取消待複習標記。');
   });
   filter.addEventListener('click', () => {
     reviewOnly = !reviewOnly;
     config.resetPage(); config.render();
-    message(reviewOnly ? '目前只顯示本單元符合篩選條件的待複習題目。' : '已顯示所有題目。');
+    message(reviewOnly ? '目前只顯示所選搜尋範圍內符合篩選條件的待複習題目。' : '已顯示所選搜尋範圍的題目。');
   });
   sizeSelect.addEventListener('change', () => {
     document.body.classList.toggle('large-reading', sizeSelect.value === 'large'); write();

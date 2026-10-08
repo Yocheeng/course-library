@@ -70,3 +70,66 @@ body[data-course="algorithms"] { --muted:#66636a; }
 
 .practice-feedback .feedback { margin:10px 0; }
 .practice-feedback button { min-height:44px; }
+
+/* Search scope and question quality stay readable at narrow widths and zoom. */
+body[data-course="os"] { --control-line:#70869a; --rail-focus:#b8dcfa; }
+body[data-course="algorithms"] { --control-line:#8a7780; --rail-focus:#f2bdd0; --rose-strong:#85475e; }
+.search-options { display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px; margin-bottom:8px; font-size:14px; color:var(--ink); }
+.search-options label { font-weight:650; }
+.search-options select { min-width:0; max-width:100%; min-height:44px; padding:8px 12px; border:1px solid var(--control-line); border-radius:8px; background:#fff; color:var(--ink); font-size:16px; }
+[data-course] .search-scope,[data-course] .quality-hint { font-size:14px; line-height:1.7; color:var(--muted); }
+.quality-hint { margin:10px 0 0; }
+.filter-details { flex:1 1 380px; }
+.filter-fields label { flex-wrap:wrap; }
+.filter-fields select { max-width:100%; }
+.study-controls { flex:0 1 auto; }
+[data-course] .filters select,[data-course] .plain,[data-course] .pager button,[data-course] .reading-size select { border-color:var(--control-line); }
+[data-course] .searchbox { border-color:var(--control-line); }
+[data-course] .searchbox:focus-within { outline:3px solid var(--ui-accent); outline-offset:2px; }
+[data-course] .searchbox input:focus-visible { outline:none; }
+[data-course] .searchbox input::placeholder { color:var(--muted); opacity:1; }
+[data-course] .option input { accent-color:var(--ui-accent); }
+[data-course] .option.chosen { border-color:var(--ui-accent); }
+[data-course] .site-nav a:focus-visible,[data-course] .course-nav:focus-visible,.mobile-navigation a:focus-visible,.mobile-navigation summary:focus-visible { outline-color:var(--rail-focus); }
+[data-course] .eyebrow,[data-course] .count span,[data-course] .badge,[data-course] .qid,[data-course] .bottom-note,[data-course] .sources,[data-course] .learning-tools small,[data-course] .reading-pager span { font-size:14px; }
+[data-course] .eyebrow,[data-course] .bottom-note,[data-course] .sources summary { color:var(--ui-accent); }
+[data-course] .guide-head small { font-size:14px; }
+.guide[open] p { height:auto; overflow:visible; }
+.summary { flex-wrap:wrap; overflow-wrap:anywhere; scroll-margin-top:18px; }
+.badges { min-width:0; flex:1 1 240px; }
+.badge { overflow-wrap:anywhere; }
+[data-course] .badge.gold,.quality-note { color:#735019; background:#fff4de; }
+.quality-note { margin:0 0 14px; padding:10px 12px; border-left:3px solid #92682b; border-radius:6px; font-size:14px; line-height:1.7; }
+.unit-badge { font-weight:650; }
+.question-actions { display:flex; flex-wrap:wrap; margin-top:16px; padding-top:10px; border-top:1px solid var(--ui-line); }
+.question-report { display:inline-flex; align-items:center; min-height:44px; padding:6px 0; color:var(--ui-accent); font-size:14px; text-underline-offset:3px; overflow-wrap:anywhere; }
+.question-report:focus-visible,.summary:focus-visible,.question:focus-visible { outline:3px solid var(--ui-accent); outline-offset:4px; }
+.question { scroll-margin-top:80px; }
+.active-filters button { min-height:44px; }
+
+@media(max-width:720px) {
+  .search-options select { flex:1 1 180px; }
+  .search-options label { flex:0 0 auto; }
+  .filter-fields label { align-items:flex-start; }
+  .filter-fields select { width:100%; }
+  .filters .filter-details { width:100%; }
+  .study-controls { flex-wrap:wrap; }
+  .summary { scroll-margin-top:72px; }
+  .badges { flex-basis:100%; }
+  .reading-pager { flex-wrap:wrap; }
+  .reading-settings { margin-left:0; }
+}
+
+@media(forced-colors:active) {
+  .quality-note { border:1px solid CanvasText; }
+  .option.chosen,.badge.gold { outline:1px solid Highlight; }
+}
+@media print { .search-options,.question-actions,.quality-hint { display:none !important; } }
+
+@media(min-width:721px) { [data-course] .sidebar { padding-bottom:100px; } }
+@media(max-width:720px) {
+  .main,[data-course="os"] .main { padding-bottom:140px; }
+  .reading-pager { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); padding-right:84px; gap:6px 8px; min-height:60px; }
+  .reading-pager span { grid-column:1 / -1; grid-row:1; text-align:center; }
+  .reading-pager.single-page { grid-template-columns:minmax(0,1fr); }
+}

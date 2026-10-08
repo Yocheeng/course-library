@@ -174,3 +174,14 @@ html.course-shell-active, body.course-shell-active { overflow: hidden !important
   .music-launcher.is-playing .music-launcher-bars i { animation: none; height: 6px; }
   .music-player-panel:not([hidden]) { animation: none; }
 }
+
+/* Keep the launcher in reserved navigation space while reading. */
+@media(min-width:721px) {
+  body[data-course] .music-launcher,body.course-shell-active .music-launcher { left:22px; right:auto; bottom:22px; }
+  body[data-course] .music-player-panel,body.course-shell-active .music-player-panel { left:22px; right:auto; transform-origin:bottom left; }
+}
+@media(max-width:720px) {
+  body[data-course] .music-launcher,body.course-shell-active .music-launcher { right:16px; bottom:max(8px,env(safe-area-inset-bottom)); width:44px; height:44px; border-radius:12px; }
+  body[data-course] .music-player-panel,body.course-shell-active .music-player-panel { bottom:calc(100px + env(safe-area-inset-bottom)); max-height:calc(100dvh - 124px - env(safe-area-inset-bottom)); }
+  body[data-course].reading-input-focus .music-launcher { display:none; }
+}
