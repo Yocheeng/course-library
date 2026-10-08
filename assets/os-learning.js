@@ -1,4 +1,4 @@
-/* The OS bank keeps its original question records and IDs. */
+/* OS question-bank interactions, retaining stable question IDs. */
 'use strict';
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -37,7 +37,7 @@ function matches() {
     ($('chapter').value === 'all' || q.category === $('chapter').value) &&
     ($('typeSelect').value === 'all' || kind(q) === $('typeSelect').value) &&
     ($('qualitySelect').value !== 'pending' || window.courseQuestionTools.qualityReasons(q, 'os').length > 0) &&
-    tokens.every(t => norm([q.stem,q.answer,q.category,q.translation,q.explanation,q.note,...(q.options || []),...(q.terms || []).map(x => x.label+' '+x.text)].join(' ')).includes(t)));
+    tokens.every(t => norm([q.stem,q.answer,q.originalAnswer,q.category,q.translation,q.explanation,q.note,q.reviewIssue,q.missingContext,...(q.options || []),...(q.terms || []).map(x => x.label+' '+x.text)].join(' ')).includes(t)));
 }
 function switchUnit(i) {
   active = i; page = 1; revealed.clear();
@@ -52,7 +52,7 @@ function switchUnit(i) {
   render();
 }
 function answerMarkup(q) {
-  return `<div class="answer" id="answer-${q.id}"><div><strong>原題庫答案</strong><br><span class="answer-value">${highlighted(q.answer)}</span></div>${q.note?`<div class="warning"><strong>原題備註</strong><br>${highlighted(q.note)}</div>`:''}${q.explanation?`<div class="explain"><strong>原解析</strong><br>${highlighted(q.explanation)}</div>`:q.terms?.length?`<div class="explain"><strong>相關名詞與作用</strong>${q.terms.map(t=>`<div class="term"><b>${highlighted(t.label)}</b><br>${highlighted(t.text)}</div>`).join('')}</div>`:'<div class="explain">原始題庫尚未提供本題詳細解析。</div>'}</div>`;
+  return `<div class="answer" id="answer-${q.id}"><div><strong>${window.courseQuestionTools.answerLabel(q)}</strong><br><span class="answer-value">${highlighted(q.answer)}</span></div>${q.note?`<div class="warning"><strong>題目備註</strong><br>${highlighted(q.note)}</div>`:''}${q.explanation?`<div class="explain"><strong>解析</strong><div class="explanation-text">${highlighted(q.explanation)}</div></div>`:q.terms?.length?`<div class="explain"><strong>相關名詞與作用</strong>${q.terms.map(t=>`<div class="term"><b>${highlighted(t.label)}</b><br>${highlighted(t.text)}</div>`).join('')}</div>`:'<div class="explain">原始題庫尚未提供本題詳細解析。</div>'}${window.courseQuestionTools.reviewMarkup(q)}</div>`;
 }
 function cardMarkup({q, unit, unitIndex, i}) {
   const practice = mode === 'practice', open = revealed.has(q.id) || (!practice && $('showAnswers').checked), chosen = selections.get(q.id) || [];
@@ -84,7 +84,7 @@ function toggleAnswer(id,button) {
   card.querySelector('.practice-feedback')?.remove();
   if(mode==='practice' && open) {
     const q=findEntry(id).q;
-    const result=window.coursePractice.evaluate(q.answer,q.options||[],selections.get(id)||[]);
+    const result=window.coursePractice.evaluate(q.answer,q.options||[],selections.get(id)||[],q);
     feedback.set(id,result);
     window.coursePractice.show(card,result,id);
   }

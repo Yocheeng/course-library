@@ -26,16 +26,18 @@
     return mapped.map(i => String.fromCharCode(65 + i)).sort().join('');
   }
 
-  function evaluate(answer, options, chosen) {
-    if (!options.length) return { correct:null, text:'請對照你的解題想法與原答案；文字意思與答案格式需要自己確認。' };
+  function evaluate(answer, options, chosen, question = {}) {
+    if (question.reviewIssue || question.missingContext) return { correct:null, text:'本題的答案、題意或原始資料仍需確認，暫不自動判分。請閱讀解析中的疑點與成立條件。' };
+    if (!options.length) return { correct:null, text:'請對照你的解題想法與答案、解析；文字意思與答案格式需要自己確認。' };
     if (!chosen.length) return { correct:null, text:'你尚未選擇選項。可以先收起答案，再試著作答。' };
     const expected = expectedChoiceKey(answer, options);
-    if (expected === null) return { correct:null, text:'原題庫答案無法可靠對應到選項；請自行對照答案與解析，本題不自動判斷。' };
+    if (expected === null) return { correct:null, text:'題庫答案無法可靠對應到選項；請自行對照答案與解析，本題不自動判斷。' };
     const actual = [...new Set(chosen)].sort((a,b) => a-b).map(i => String.fromCharCode(65+i)).join('');
     const correct = actual === expected;
+    const label = question.originalAnswer ? '修正後答案' : '題庫答案';
     return { correct, text:correct
-      ? '選項與原題庫答案一致。請再讀解析，確認理由。'
-      : '選項與原題庫答案不同，請對照解析；有提醒的題目也請核對原題。' };
+      ? `選項與${label}一致。請再讀解析，確認理由。`
+      : `選項與${label}不同，請對照解析；有提醒的題目也請核對原題。` };
   }
 
   function markup(result, id) {
