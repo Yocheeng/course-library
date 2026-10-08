@@ -140,7 +140,7 @@ body[data-course="algorithms"] { --control-line:#8a7780; --rail-focus:#f2bdd0; -
 }
 @media print { .search-options,.question-actions,.quality-hint { display:none !important; } }
 
-@media(min-width:721px) { [data-course] .sidebar { padding-bottom:100px; } }
+@media(min-width:721px) { .has-music-radio[data-course] .sidebar { padding-bottom:100px; } }
 @media(max-width:720px) {
   [data-course] .main { padding-top:12px; }
   [data-course] .heading { margin-bottom:8px; align-items:center; }
@@ -160,7 +160,8 @@ body[data-course="algorithms"] { --control-line:#8a7780; --rail-focus:#f2bdd0; -
   [data-course] .study-controls { flex:0 0 auto; margin-top:0; }
   .learning-tools { margin:6px 0; }
   .main,[data-course="os"] .main { padding-bottom:140px; }
-  .reading-pager { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); padding-right:84px; gap:6px 8px; min-height:60px; }
+  .reading-pager { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); padding-right:16px; gap:6px 8px; min-height:60px; }
+  .has-music-radio .reading-pager { padding-right:84px; }
   .reading-pager span { grid-column:1 / -1; grid-row:1; text-align:center; }
   .reading-pager.single-page { grid-template-columns:minmax(0,1fr); }
 }
