@@ -83,8 +83,7 @@
   function refresh() {
     const label = config.scopeLabel();
     scope.textContent = '搜尋範圍：' + label;
-    const range = config.allUnits() ? '全部單元' : '目前單元';
-    search.placeholder = `搜尋${range}的題目、答案或${config.course === 'os' ? '術語' : '公式'}…`;
+    search.placeholder = '搜尋題目、答案或解析…';
     search.setAttribute('aria-label', `搜尋${label}的題目、答案與解析`);
     tools.querySelector('.review-filter').firstChild.textContent = config.allUnits() ? '全部單元待複習 ' : '本單元待複習 ';
     unitSelect.innerHTML = unit.innerHTML; unitSelect.value = unit.value;

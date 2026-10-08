@@ -3,6 +3,45 @@
   'use strict';
   const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const missingSource = question => Boolean(question.missingContext) || /追蹤/.test(question.type || '') || /樹中的「\?」|第6行與第10行|第 5 行/.test(question.q || '');
+
+  const normalize = value => String(value ?? '').normalize('NFKC').toLowerCase();
+  const searchTokens = query => [...new Set(normalize(query).trim().split(/\s+/).filter(Boolean))];
+  function searchFields(question) {
+    return [
+      { label:'題幹', values:[question.stem ?? question.q, question.translation] },
+      { label:'選項', values:question.options || question.opts || [] },
+      { label:'答案', values:[question.answer ?? question.a] },
+      { label:'修正前答案', values:[question.originalAnswer] },
+      { label:'解析', values:[question.explanation ?? question.ex, ...(question.terms || []).map(term => `${term.label} ${term.text}`)] },
+      { label:'備註', values:[question.note, question.reviewIssue, question.missingContext] },
+      { label:'分類', values:[question.category, question.type] }
+    ];
+  }
+
+  function matchesSearch(question, query) {
+    const text = normalize(searchFields(question).flatMap(field => field.values).filter(Boolean).join(' '));
+    return searchTokens(query).every(token => text.includes(token));
+  }
+
+  function searchMatchMarkup(question, query) {
+    const tokens = searchTokens(query);
+    if (!tokens.length) return '';
+    const labels = searchFields(question).filter(field => {
+      const text = normalize(field.values.filter(Boolean).join(' '));
+      return tokens.some(token => text.includes(token));
+    }).map(field => field.label);
+    return labels.length ? `<p class="search-match">命中：${labels.map(escape).join('、')}</p>` : '';
+  }
+
+  function explanationMarkup(question, format = escape) {
+    const text = String(question.explanation ?? question.ex ?? '');
+    return text.split(/\n\s*\n/).filter(Boolean).map(block => {
+      const section = block.match(/^(核心觀念|解題步驟|判讀步驟|適用條件|選項判讀)：\s*([\s\S]*)$/);
+      return section
+        ? `<div class="explanation-section"><strong>${escape(section[1])}</strong><p>${format(section[2])}</p></div>`
+        : `<p>${format(block)}</p>`;
+    }).join('');
+  }
   function qualityReasons(question, course) {
     const reasons = [];
     const note = question.note || '';
@@ -72,5 +111,5 @@
     });
   }
 
-  window.courseQuestionTools = { qualityReasons, qualityMarkup, missingSource, answerLabel, reviewMarkup, populateSelect, reportURL, focusResults, focusLinkedQuestion };
+  window.courseQuestionTools = { matchesSearch, searchMatchMarkup, explanationMarkup, qualityReasons, qualityMarkup, missingSource, answerLabel, reviewMarkup, populateSelect, reportURL, focusResults, focusLinkedQuestion };
 })();
