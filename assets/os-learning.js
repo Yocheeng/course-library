@@ -6,7 +6,8 @@ const guides = {
   basics:'把作業系統想成電腦的管理員：協調 CPU、記憶體與裝置，讓應用程式使用資源。讀題時先分清楚硬體、作業系統與應用程式的角色。',
   architecture:'把 system call 想成向核心提出服務申請：應用程式透過 API 表達需求，再由作業系統執行。先分清楚使用者模式與核心模式，再比較不同系統架構。',
   process:'程式像食譜，程序像正在依食譜做菜的工作。先分清楚程序狀態、排程與 context switch，再比較 shared memory 和 message passing 如何交換資訊。',
-  threads:'執行緒像同一個工作裡分頭處理的小組：共享程序資源，但各自保有執行狀態。先分清楚 user thread 與 kernel thread，再看執行緒模型、函式庫和多核心效能。'
+  threads:'執行緒像同一個工作裡分頭處理的小組：共享程序資源，但各自保有執行狀態。先分清楚 user thread 與 kernel thread，再看執行緒模型、函式庫和多核心效能。',
+  scheduling:'CPU 排程決定就緒佇列中誰先使用 CPU。先分清楚搶佔式與非搶佔式，再比較 FCFS、SJF、RR 與優先權排程；計算時注意到達時間、CPU burst、時間片，以及等待、周轉與回應時間的差別。'
 };
 let active = 0, page = 1, totalPages = 1, mode = 'study';
 const pageSize = 20, drafts = new Map(), selections = new Map(), revealed = new Set(), feedback = new Map();
@@ -14,6 +15,7 @@ const answerLetters = q => [...new Set(q.answer.match(/[A-D](?=[.、，,\s]|$)/g
 const kind = q => q.type || (!q.options?.length ? '填空／簡答' : answerLetters(q).length > 1 ? '多選題' : '單選題');
 const unitNumber = i => String(i + 2).padStart(2, '0');
 const questionEntries = UNITS.flatMap((unit, unitIndex) => unit.questions.map((q, i) => ({q, unit, unitIndex, i})));
+document.querySelector('[data-course-total]').textContent = `${UNITS.length} 個單元 · ${questionEntries.length} 道題目`;
 const allUnits = () => $('searchScopeSelect').value === 'all';
 const scopedEntries = () => allUnits() ? questionEntries : questionEntries.filter(entry => entry.unitIndex === active);
 const findEntry = id => questionEntries.find(entry => entry.q.id === id);
