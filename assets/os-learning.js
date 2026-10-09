@@ -18,7 +18,7 @@ const questionEntries = UNITS.flatMap((unit, unitIndex) => unit.questions.map((q
 document.querySelector('[data-course-total]').textContent = `${UNITS.length} 個單元 · ${questionEntries.length} 道題目`;
 const allUnits = () => $('searchScopeSelect').value === 'all';
 const scopedEntries = () => allUnits() ? questionEntries : questionEntries.filter(entry => entry.unitIndex === active);
-const findEntry = id => questionEntries.find(entry => entry.q.id === id);
+const findEntry = id => questionEntries.find(entry => entry.q.id === id || entry.q.aliases?.includes(id));
 function refreshFilters() {
   const entries = scopedEntries();
   window.courseQuestionTools.populateSelect($('chapter'), entries.map(({q}) => q.category), 'all', '全部章節');
@@ -115,14 +115,15 @@ $('cards').addEventListener('change',e=>{
 const linkedQuestion = new URLSearchParams(location.search).get('question');
 const linkedEntry = findEntry(linkedQuestion);
 switchUnit(linkedEntry?.unitIndex ?? 0);
-if (linkedEntry) { page=Math.floor(linkedEntry.i/pageSize)+1; render(); window.courseQuestionTools.focusLinkedQuestion(linkedQuestion); }
+if (linkedEntry) { page=Math.floor(linkedEntry.i/pageSize)+1; render(); window.courseQuestionTools.focusLinkedQuestion(linkedEntry.q.id); }
 window.courseLearning={
   course:'os',toolbar:document.querySelector('.toolbar'),sidebar:document.querySelector('.sidebar'),list:$('cards'),
   unitIds:()=>UNITS[active].questions.map(q=>q.id),
   scopeIds:()=>scopedEntries().map(({q})=>q.id), allUnits,
   scopeLabel:()=>allUnits()?`作業系統 · 全部 ${UNITS.length} 個單元`:`目前單元 · ${UNITS[active].label}`,
   cardTop:card=>card.querySelector('.cardtop'),render,resetPage:()=>{page=1;},
-  validId:id=>UNITS.some(u=>u.questions.some(q=>q.id===id)),
+  resolveId:id=>findEntry(id)?.q.id,
+  validId:id=>Boolean(findEntry(id)),
   questionLabel:id=>{const entry=findEntry(id);return `${entry.unit.label} 第 ${entry.i+1} 題`;},
   questionDetails:id=>{const {q,unit,i}=findEntry(id);return {course:'os',id,unit:unit.label,number:i+1,question:q.stem,answer:q.answer};},
   currentPage:()=>page, pageCount:()=>totalPages

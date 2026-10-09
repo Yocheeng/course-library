@@ -5,7 +5,10 @@
   const key = `course-library.learning.v1.${config.course}`;
   const read = () => { try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch { return {}; } };
   const initial = read();
-  const saved = new Set(Array.isArray(initial.bookmarks) ? initial.bookmarks.filter(x => typeof x === 'string' && config.validId(x)) : []);
+  const initialBookmarks = Array.isArray(initial.bookmarks) ? initial.bookmarks : [];
+  const saved = new Set(initialBookmarks.filter(x => typeof x === 'string')
+    .map(id => config.resolveId ? config.resolveId(id) : id)
+    .filter(id => typeof id === 'string' && config.validId(id)));
   let reviewOnly = false;
   const tools = document.createElement('div');
   tools.className = 'learning-tools';
@@ -25,8 +28,9 @@
     try { localStorage.setItem(key, JSON.stringify({ bookmarks:[...saved], size:sizeSelect.value })); }
     catch { tools.querySelector('small').textContent = '瀏覽器無法保存，紀錄僅保留本次開啟'; }
   }
-  // Remove obsolete saved progress while preserving bookmarks and text size.
-  if (Object.prototype.hasOwnProperty.call(initial, 'state')) write();
+  // Migrate merged question IDs and remove obsolete progress, retaining marks.
+  if (Object.prototype.hasOwnProperty.call(initial, 'state') ||
+      initialBookmarks.length !== saved.size || initialBookmarks.some(id => !saved.has(id))) write();
   function refresh() {
     config.list.querySelectorAll('article[data-id]').forEach(card => {
       let button = card.querySelector('.review-button');
