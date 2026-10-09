@@ -2,7 +2,8 @@
 (() => {
   'use strict';
   const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
-  const missingSource = question => Boolean(question.missingContext) || /追蹤/.test(question.type || '') || /樹中的「\?」|第6行與第10行|第 5 行/.test(question.q || '');
+  const hasProvidedAnswer = question => question.answerProvided === true && Boolean(String(question.answer ?? question.a ?? '').trim());
+  const missingSource = question => !hasProvidedAnswer(question) && (Boolean(question.missingContext) || /追蹤/.test(question.type || '') || /樹中的「\?」|第6行與第10行|第 5 行/.test(question.q || ''));
 
   const normalize = value => String(value ?? '').normalize('NFKC').toLowerCase();
   const searchTokens = query => [...new Set(normalize(query).trim().split(/\s+/).filter(Boolean))];
@@ -13,7 +14,7 @@
       { label:'答案', values:[question.answer ?? question.a] },
       { label:'修正前答案', values:[question.originalAnswer] },
       { label:'解析', values:[question.explanation ?? question.ex, ...(question.terms || []).map(term => `${term.label} ${term.text}`)] },
-      { label:'備註', values:[question.note, question.reviewIssue, question.missingContext] },
+      { label:'備註', values:[question.note, ...(!hasProvidedAnswer(question) ? [question.reviewIssue, question.missingContext] : [])] },
       { label:'分類', values:[question.category, question.type] }
     ];
   }
@@ -43,6 +44,7 @@
     }).join('');
   }
   function qualityReasons(question, course) {
+    if (hasProvidedAnswer(question)) return [];
     const reasons = [];
     const note = question.note || '';
     if (question.reviewIssue) reasons.push('答案或題意有疑點');
@@ -66,7 +68,7 @@
 
   function answerLabel(question) {
     const label = question.originalAnswer ? '修正後答案' : '題庫答案';
-    return question.reviewIssue || question.missingContext ? `${label}（待確認）` : label;
+    return !hasProvidedAnswer(question) && (question.reviewIssue || question.missingContext) ? `${label}（待確認）` : label;
   }
 
   function reviewMarkup(question) {
@@ -111,5 +113,5 @@
     });
   }
 
-  window.courseQuestionTools = { matchesSearch, searchMatchMarkup, explanationMarkup, qualityReasons, qualityMarkup, missingSource, answerLabel, reviewMarkup, populateSelect, reportURL, focusResults, focusLinkedQuestion };
+  window.courseQuestionTools = { hasProvidedAnswer, matchesSearch, searchMatchMarkup, explanationMarkup, qualityReasons, qualityMarkup, missingSource, answerLabel, reviewMarkup, populateSelect, reportURL, focusResults, focusLinkedQuestion };
 })();
